@@ -12,10 +12,9 @@ const app = express();
 require("./config/firabaseConfig");
 //Middleware
 app.use(morgan("dev"));
-app.use(cors({ origin: true }));
 
-// app.use(fileupload());
-// app.use(express.urlencoded({ extended: true }));
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Routes
