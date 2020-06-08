@@ -3,8 +3,6 @@ const router = Router();
 const admin = require("../config/firabaseConfig");
 const db = admin.firestore();
 var foto = admin.storage().bucket();
-
-const path = require('path');
 const multer = require('../libs/multer');
 const { v4: uuid } = require('uuid')
 
@@ -25,12 +23,20 @@ router.post("/imagen", multer.single('image'), async (req, res) => {
         }
       }
     });
+
     const img = fotoUpload[0];
-    const photo = img.name;
+    const name = img.metadata.name;
+    const bucket = img.metadata.bucket;
+    const token = img.metadata.metadata.firebaseStorageDownloadTokens;
+
+    let url = await "https://firebasestorage.googleapis.com/v0/b/" + bucket + "/o/"
+      + encodeURIComponent(name) + "?alt=media&token=" + token;
+
     res.json({
       messaje: 'Imagen subida  satisfactioriamente',
-      photo
+      url
     });
+
   } catch (error) {
     res.json(error)
   }
